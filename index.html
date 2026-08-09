@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Toolkit</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F3460">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Design Toolkit">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#0F3460;
+    --blue-line:#3D6FA8;
+    --paper:#F5F7FA;
+    --cyan:#7FDBFF;
+    --orange:#E85D04;
+    --charcoal:#1B1F24;
+    --muted:#5C6B7A;
+    --card:#FFFFFF;
+    --border:#D6DEE8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--blue);
+    background-image:
+      linear-gradient(var(--blue-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blue-line) 1px, transparent 1px);
+    background-size: 26px 26px;
+    background-attachment: fixed;
+    color:var(--charcoal);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    padding:18px 14px 80px;
+  }
+  .wrap{max-width:740px;margin:0 auto;}
+
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:2px solid var(--cyan);
+  }
+  header h1{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:1.5rem;
+    margin:0;
+    color:#fff;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  header .sub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.62rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--cyan);
+  }
+  .tbox{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.6rem;
+    color:var(--cyan);
+    border:1px solid var(--cyan);
+    border-radius:3px;
+    padding:5px 9px;
+    text-align:center;
+    line-height:1.4;
+  }
+
+  /* Tabs */
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin-bottom:16px;
+    overflow-x:auto;
+    padding-bottom:2px;
+  }
+  .tabs button{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--blue-line);
+    color:var(--paper);
+    border-radius:4px;
+    padding:9px 13px;
+    cursor:pointer;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .tabs button.active{
+    background:var(--orange);
+    border-color:var(--orange);
+    color:#fff;
+  }
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .card h2{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    font-size:1rem;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    margin:0 0 12px;
+    color:var(--blue);
+  }
+  .row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .row.full{grid-template-columns:1fr;}
+  label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  input, select{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.9rem;
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:8px 9px;
+    background:#fff;
+    color:var(--charcoal);
+    width:100%;
+  }
+  .result{
+    margin-top:10px;
+    background:var(--blue);
+    color:#fff;
+    border-radius:5px;
+    padding:12px 14px;
+  }
+  .result .r-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    padding:3px 0;
+  }
+  .result .r-row .val{color:var(--cyan);font-weight:600;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.78rem;
+  }
+  th, td{
+    text-align:left;
+    padding:7px 6px;
+    border-bottom:1px solid var(--border);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+  }
+  th{
+    color:var(--blue);
+    text-transform:uppercase;
+    font-size:0.62rem;
+    letter-spacing:0.05em;
+  }
+  .mat-name{font-family:'Inter',sans-serif;font-weight:600;font-size:0.8rem;color:var(--charcoal);}
+  .search-box{margin-bottom:12px;}
+
+  .fit-item{
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .fit-item:last-child{border-bottom:none;}
+  .fit-code{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--orange);
+  }
+  .fit-desc{font-size:0.8rem;color:var(--charcoal);margin-top:2px;}
+  .fit-use{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+
+  .conv-swap{
+    text-align:center;
+    margin:2px 0 10px;
+  }
+  .conv-swap button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    background:none;
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:5px 12px;
+    cursor:pointer;
+    color:var(--blue);
+  }
+
+  footer{
+    text-align:center;
+    margin-top:22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.6rem;
+    color:var(--cyan);
+    opacity:0.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Design Toolkit</h1>
+      <div class="sub">Mechanical Engineering Reference</div>
+    </div>
+    <div class="tbox">SI<br>UNITS</div>
+  </header>
+
+  <div class="tabs">
+    <button class="active" onclick="showTab('beam')">Beam</button>
+    <button onclick="showTab('gear')">Gears</button>
+    <button onclick="showTab('fos')">FOS</button>
+    <button onclick="showTab('materials')">Materials</button>
+    <button onclick="showTab('fits')">Fits</button>
+    <button onclick="showTab('convert')">Convert</button>
+  </div>
+
+  <!-- BEAM -->
+  <div class="panel active" id="panel-beam">
+    <div class="card">
+      <h2>Beam Deflection & Stress</h2>
+      <div class="row">
+        <label>Support Type
+          <select id="beamSupport" onchange="calcBeam()">
+            <option value="ss">Simply Supported</option>
+            <option value="cant">Cantilever</option>
+          </select>
+        </label>
+        <label>Load Type
+          <select id="beamLoad" onchange="calcBeam()">
+            <option value="point">Point Load</option>
+            <option value="udl">Uniformly Distributed (UDL)</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>Length L (m)<input type="number" id="beamL" value="1" step="0.01" oninput="calcBeam()"></label>
+        <label id="loadLabel">Load P (N)<input type="number" id="beamP" value="1000" step="1" oninput="calcBeam()"></label>
+      </div>
+      <div class="row">
+        <label>Young's Modulus E (GPa)<input type="number" id="beamE" value="200" step="1" oninput="calcBeam()"></label>
+        <label>Moment of Inertia I (mm⁴)<input type="number" id="beamI" value="1000000" step="1" oninput="calcBeam()"></label>
+      </div>
+      <div class="row full">
+        <label>Section Modulus Z (mm³) — optional, for bending stress<input type="number" id="beamZ" value="20000" step="1" oninput="calcBeam()"></label>
+      </div>
+      <div class="result">
+        <div class="r-row"><span>Max Bending Moment</span><span class="val" id="outMoment">—</span></div>
+        <div class="r-row"><span>Max Deflection</span><span class="val" id="outDefl">—</span></div>
+        <div class="r-row"><span>Max Bending Stress</span><span class="val" id="outStress">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GEAR -->
+  <div class="panel" id="panel-gear">
+    <div class="card">
+      <h2>Gear Ratio & RPM</h2>
+      <div class="row">
+        <label>Driver Teeth T₁<input type="number" id="gearT1" value="20" oninput="calcGear()"></label>
+        <label>Driven Teeth T₂<input type="number" id="gearT2" value="40" oninput="calcGear()"></label>
+      </div>
+      <div class="row">
+        <label>Driver Speed N₁ (RPM)<input type="number" id="gearN1" value="1000" oninput="calcGear()"></label>
+        <label>Driver Torque τ₁ (N·m) — optional<input type="number" id="gearTq1" value="0" oninput="calcGear()"></label>
+      </div>
+      <div class="result">
+        <div class="r-row"><span>Gear Ratio (T₂:T₁)</span><span class="val" id="outRatio">—</span></div>
+        <div class="r-row"><span>Driven Speed N₂</span><span class="val" id="outN2">—</span></div>
+        <div class="r-row"><span>Driven Torque τ₂ (ideal)</span><span class="val" id="outTq2">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOS -->
+  <div class="panel" id="panel-fos">
+    <div class="card">
+      <h2>Factor of Safety</h2>
+      <div class="row">
+        <label>Mode
+          <select id="fosMode" onchange="calcFos()">
+            <option value="find">Find FOS</option>
+            <option value="allow">Find Allowable Stress</option>
+          </select>
+        </label>
+        <label>Yield / Ultimate Strength (MPa)<input type="number" id="fosYield" value="250" oninput="calcFos()"></label>
+      </div>
+      <div class="row" id="fosRow2">
+        <label id="fosInput2Label">Working Stress (MPa)<input type="number" id="fosInput2" value="80" oninput="calcFos()"></label>
+        <label></label>
+      </div>
+      <div class="result">
+        <div class="r-row" id="fosResultRow"><span>Factor of Safety</span><span class="val" id="outFos">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALS -->
+  <div class="panel" id="panel-materials">
+    <div class="card">
+      <h2>Material Properties</h2>
+      <input class="search-box" type="text" placeholder="Search material..." id="matSearch" oninput="renderMaterials()">
+      <table>
+        <thead><tr><th>Material</th><th>Yield<br>(MPa)</th><th>UTS<br>(MPa)</th><th>E<br>(GPa)</th><th>Density<br>(kg/m³)</th></tr></thead>
+        <tbody id="matTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FITS -->
+  <div class="panel" id="panel-fits">
+    <div class="card">
+      <h2>Standard ISO Fits (Hole Basis)</h2>
+      <div id="fitsList"></div>
+    </div>
+  </div>
+
+  <!-- CONVERT -->
+  <div class="panel" id="panel-convert">
+    <div class="card">
+      <h2>Unit Converter</h2>
+      <div class="row full">
+        <label>Quantity
+          <select id="convType" onchange="setupConvert()">
+            <option value="stress">Stress / Pressure</option>
+            <option value="torque">Torque</option>
+            <option value="power">Power</option>
+            <option value="force">Force</option>
+            <option value="length">Length</option>
+            <option value="temp">Temperature</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label id="convFromLabel">From<input type="number" id="convInput" value="1" oninput="calcConvert()"></label>
+        <label>Unit
+          <select id="convFromUnit" onchange="calcConvert()"></select>
+        </label>
+      </div>
+      <div class="conv-swap"><button onclick="swapConvert()">⇅ Swap</button></div>
+      <div class="row">
+        <label>Result<input type="text" id="convOutput" readonly></label>
+        <label>Unit
+          <select id="convToUnit" onchange="calcConvert()"></select>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <footer>Values are engineering approximations — verify against design codes for critical applications.</footer>
+
+</div>
+
+<script>
+function showTab(name){
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+/* ---------- BEAM ---------- */
+function calcBeam(){
+  const support = document.getElementById('beamSupport').value;
+  const loadType = document.getElementById('beamLoad').value;
+  const L = parseFloat(document.getElementById('beamL').value) || 0;
+  const P = parseFloat(document.getElementById('beamP').value) || 0;
+  const E_GPa = parseFloat(document.getElementById('beamE').value) || 0;
+  const I_mm4 = parseFloat(document.getElementById('beamI').value) || 0;
+  const Z_mm3 = parseFloat(document.getElementById('beamZ').value) || 0;
+
+  document.getElementById('loadLabel').innerHTML = (loadType === 'point' ? 'Load P (N)' : 'Load w (N/m)') +
+    '<input type="number" id="beamP" value="'+P+'" step="1" oninput="calcBeam()">';
+
+  const E = E_GPa * 1e9;      // Pa
+  const I = I_mm4 * 1e-12;    // m^4
+
+  let M = 0, defl = 0;
+  if(support === 'ss'){
+    if(loadType === 'point'){
+      M = P*L/4;
+      defl = (P*Math.pow(L,3))/(48*E*I);
+    } else {
+      M = P*L*L/8;
+      defl = (5*P*Math.pow(L,4))/(384*E*I);
+    }
+  } else { // cantilever
+    if(loadType === 'point'){
+      M = P*L;
+      defl = (P*Math.pow(L,3))/(3*E*I);
+    } else {
+      M = P*L*L/2;
+      defl = (P*Math.pow(L,4))/(8*E*I);
+    }
+  }
+
+  const deflMM = defl * 1000;
+  const M_Nmm = M * 1000;
+  const stress = Z_mm3 ? (M_Nmm / Z_mm3) : null;
+
+  document.getElementById('outMoment').textContent = isFinite(M) ? M.toFixed(2) + ' N·m' : '—';
+  document.getElementById('outDefl').textContent = isFinite(deflMM) ? deflMM.toFixed(3) + ' mm' : '—';
+  document.getElementById('outStress').textContent = (stress !== null && isFinite(stress)) ? stress.toFixed(2) + ' MPa' : '— (enter Z)';
+}
+
+/* ---------- GEAR ---------- */
+function calcGear(){
+  const T1 = parseFloat(document.getElementById('gearT1').value) || 0;
+  const T2 = parseFloat(document.getElementById('gearT2').value) || 0;
+  const N1 = parseFloat(document.getElementById('gearN1').value) || 0;
+  const Tq1 = parseFloat(document.getElementById('gearTq1').value) || 0;
+
+  if(T1 === 0){
+    document.getElementById('outRatio').textContent = '—';
+    document.getElementById('outN2').textContent = '—';
+    document.getElementById('outTq2').textContent = '—';
+    return;
+  }
+  const ratio = T2/T1;
+  const N2 = N1 * T1 / T2;
+  const Tq2 = Tq1 * ratio;
+
+  document.getElementById('outRatio').textContent = ratio.toFixed(3) + ' : 1';
+  document.getElementById('outN2').textContent = N2.toFixed(2) + ' RPM';
+  document.getElementById('outTq2').textContent = Tq1 ? Tq2.toFixed(2) + ' N·m' : '—';
+}
+
+/* ---------- FOS ---------- */
+function calcFos(){
+  const mode = document.getElementById('fosMode').value;
+  const yield_ = parseFloat(document.getElementById('fosYield').value) || 0;
+  const label = document.getElementById('fosInput2Label');
+  const input2 = parseFloat(document.getElementById('fosInput2').value) || 0;
+  const resultRow = document.getElementById('fosResultRow');
+
+  if(mode === 'find'){
+    label.innerHTML = 'Working Stress (MPa)<input type="number" id="fosInput2" value="'+input2+'" oninput="calcFos()">';
+    const fos = input2 ? yield_/input2 : 0;
+    resultRow.innerHTML = '<span>Factor of Safety</span><span class="val" id="outFos">' + (input2 ? fos.toFixed(2) : '—') + '</span>';
+  } else {
+    label.innerHTML = 'Desired FOS<input type="number" id="fosInput2" value="'+input2+'" oninput="calcFos()">';
+    const allow = input2 ? yield_/input2 : 0;
+    resultRow.innerHTML = '<span>Allowable Stress</span><span class="val" id="outFos">' + (input2 ? allow.toFixed(2)+' MPa' : '—') + '</span>';
+  }
+}
+
+/* ---------- MATERIALS ---------- */
+const MATERIALS = [
+  {name:'Mild Steel (IS 2062)', yield:250, uts:410, E:200, density:7850},
+  {name:'Structural Steel E250', yield:250, uts:410, E:200, density:7850},
+  {name:'Stainless Steel 304', yield:215, uts:505, E:193, density:8000},
+  {name:'Cast Iron (Grey, FG200)', yield:null, uts:200, E:110, density:7200},
+  {name:'Aluminum 6061-T6', yield:276, uts:310, E:69, density:2700},
+  {name:'Aluminum 2014-T6', yield:414, uts:483, E:73, density:2800},
+  {name:'Brass (70/30)', yield:124, uts:338, E:100, density:8530},
+  {name:'Copper (annealed)', yield:69, uts:220, E:117, density:8960},
+  {name:'Titanium Ti-6Al-4V', yield:880, uts:950, E:114, density:4430},
+  {name:'EN8 (Medium Carbon Steel)', yield:280, uts:550, E:205, density:7850},
+  {name:'Spring Steel (EN47)', yield:830, uts:1200, E:207, density:7850},
+  {name:'Nylon 6/6', yield:75, uts:83, E:2.8, density:1140},
+];
+
+function renderMaterials(){
+  const q = document.getElementById('matSearch').value.toLowerCase();
+  const rows = MATERIALS.filter(m => m.name.toLowerCase().includes(q));
+  document.getElementById('matTable').innerHTML = rows.map(m => `
+    <tr>
+      <td class="mat-name">${m.name}</td>
+      <td>${m.yield ?? '—'}</td>
+      <td>${m.uts}</td>
+      <td>${m.E}</td>
+      <td>${m.density}</td>
+    </tr>
+  `).join('');
+}
+
+/* ---------- FITS ---------- */
+const FITS = [
+  {code:'H11/c11', desc:'Loose running fit', use:'Wide commercial tolerances, dusty/rough conditions'},
+  {code:'H9/d9', desc:'Free running fit', use:'Not critical, high speed / large temp variation'},
+  {code:'H8/f7', desc:'Close running fit', use:'Accurate machines, moderate speed & journal pressure'},
+  {code:'H7/g6', desc:'Sliding fit', use:"Parts that slide but don't rotate freely, precise location"},
+  {code:'H7/h6', desc:'Locational clearance fit', use:'Precise location, free assembly/disassembly'},
+  {code:'H7/k6', desc:'Locational transition fit', use:'Accurate location, light press acceptable'},
+  {code:'H7/n6', desc:'Locational transition fit (tighter)', use:'More accurate location than k6'},
+  {code:'H7/p6', desc:'Locational interference fit', use:'Rigidity + alignment, normal press-fit assembly'},
+  {code:'H7/s6', desc:'Medium drive fit', use:'Permanent/semi-permanent shrink fits, cast iron parts'},
+  {code:'H7/u6', desc:'Force fit', use:'Heavy interference, high strength parts'},
+];
+
+function renderFits(){
+  document.getElementById('fitsList').innerHTML = FITS.map(f => `
+    <div class="fit-item">
+      <div class="fit-code">${f.code}</div>
+      <div class="fit-desc">${f.desc}</div>
+      <div class="fit-use">${f.use}</div>
+    </div>
+  `).join('');
+}
+
+/* ---------- CONVERT ---------- */
+const CONV_UNITS = {
+  stress: {label:'Value', units:{'MPa':1, 'kPa':0.001, 'Pa':1e-6, 'psi':0.00689476, 'ksi':6.89476, 'bar':0.1, 'N/mm²':1}},
+  torque: {units:{'N·m':1, 'N·mm':0.001, 'kN·m':1000, 'lb·ft':1.35582, 'lb·in':0.112985, 'kgf·m':9.80665}},
+  power: {units:{'kW':1, 'W':0.001, 'hp (metric)':0.735499, 'hp (mech)':0.7457, 'BTU/hr':0.000293071}},
+  force: {units:{'N':1, 'kN':1000, 'lbf':4.44822, 'kgf':9.80665, 'dyne':1e-5}},
+  length: {units:{'mm':1, 'cm':10, 'm':1000, 'in':25.4, 'ft':304.8, 'µm':0.001}},
+  temp: {units:{'°C':'c', '°F':'f', 'K':'k'}}
+};
+
+function setupConvert(){
+  const type = document.getElementById('convType').value;
+  const fromSel = document.getElementById('convFromUnit');
+  const toSel = document.getElementById('convToUnit');
+  const units = Object.keys(CONV_UNITS[type].units);
+  fromSel.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+  toSel.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+  if(units.length > 1) toSel.value = units[1];
+  calcConvert();
+}
+
+function calcConvert(){
+  const type = document.getElementById('convType').value;
+  const input = parseFloat(document.getElementById('convInput').value);
+  const fromU = document.getElementById('convFromUnit').value;
+  const toU = document.getElementById('convToUnit').value;
+  const out = document.getElementById('convOutput');
+
+  if(isNaN(input)){ out.value = '—'; return; }
+
+  if(type === 'temp'){
+    let celsius;
+    if(fromU === '°C') celsius = input;
+    else if(fromU === '°F') celsius = (input - 32) * 5/9;
+    else celsius = input - 273.15;
+
+    let result;
+    if(toU === '°C') result = celsius;
+    else if(toU === '°F') result = celsius * 9/5 + 32;
+    else result = celsius + 273.15;
+
+    out.value = result.toFixed(3);
+    return;
+  }
+
+  const units = CONV_UNITS[type].units;
+  const base = input * units[fromU];
+  const result = base / units[toU];
+  out.value = result.toFixed(6).replace(/\\.?0+$/, '');
+}
+
+function swapConvert(){
+  const fromSel = document.getElementById('convFromUnit');
+  const toSel = document.getElementById('convToUnit');
+  const tmp = fromSel.value;
+  fromSel.value = toSel.value;
+  toSel.value = tmp;
+  calcConvert();
+}
+
+/* init */
+calcBeam();
+calcGear();
+calcFos();
+renderMaterials();
+renderFits();
+setupConvert();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
